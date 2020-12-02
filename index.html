@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>مدل C4 برای تجسم معماری نرم افزار</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="./css/bootstrap-3.3.2.min.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-theme-3.3.2.min.css" rel="stylesheet" media="screen">
+    <link href="./css/c4model.css" rel="stylesheet" media="screen">
+    <link href='./css/open-sans.css' rel='stylesheet' type='text/css' />
+
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <script src="./js/bootstrap-3.3.2.min.js"></script>
+</head>
+
+<body>
+    <div id="content"style="direction: rtl">
+        <div id="header">
+            <div class="container">
+                <h1>مدل C4 برای تجسم معماری نرم افزار</h1>
+                <h2>Context, Containers, Components, Code</h2>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-8 centered">
+                        <p class="centered">
+                            <span class="glyphicon glyphicon-time" aria-hidden="true"></span> عجله داری؟ میتونی <a href="https://en.wikipedia.org/wiki/C4_model" target=_blank">صفحه ویکی </a>  ما رو بخونی و 5 دقیقه معرفی مدل C4 در InfoQ
+                            <br />
+                            <a href="https://www.infoq.com/articles/C4-architecture-model" target="_blank" class="small">مدل C4 برای معماری نرم افزار</a><br />
+                            <a href="https://www.infoq.com/articles/C4-architecture-model" target="_blank" class="small">The C4 model for software architecture</a><br />
+                            <a href="https://www.infoq.com/br/articles/C4-architecture-model" target="_blank" class="small">O modelo C4 de documentação para Arquitetura de Software</a><br />
+                            <a href="http://www.infoq.com/cn/articles/C4-architecture-model" target="_blank" class="small">用于软件架构的C4模型</a></span><br />
+                            <a href="https://www.infoq.com/jp/articles/C4-architecture-model" target="_blank" class="small">ソフトウェアアーキテクチャのためのC4モデル</a></span>
+                        </p>       
+                        
+                        <p class="centered">
+                            <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+                            یا "تجسم معماری نرم افزار با مدل C4" را تماشا کنید
+                        </p>
+                    </div>
+                    <div class="col-xs-4 centered">
+                        <p class="embed-responsive embed-responsive-16by9 centered img-thumbnail">
+                            <iframe src="https://www.youtube.com/embed/x2-rSnhpw0g" frameborder="0" allowfullscreen></iframe>
+                        </p>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <div id="navigation">
+            <a href="#Abstractions">انتزاع یا تجرد</a>
+            <a href="#CoreDiagrams">نمودارهای اصلی</a>
+            <a href="#SupplementaryDiagrams">نمودارهای تکمیلی</a>
+            <a href="#Notation">یادداشت</a>
+            <a href="review">چک لیست بررسی نمودار</a>
+            <br />
+            <a href="#Examples">مثال ها</a>
+            <a href="#FAQ">سوالات متداول</a>
+            <a href="#Modelling">نمودار نویسی در مقابل مدل سازی</a>
+            <a href="https://architectis.je" target="_blank">آموزش</a>
+            <a href="#Adopting">پذیرفتن</a>
+            <a href="#Tooling">ابزار</a>
+            <a href="#References">منابع</a>
+        </div>    
+    
+        <div class="section">
+            <div class="container">
+                <a name="Introduction"></a>
+                <h2>مقدمه</h2>
+                <p>
+                    از کسی در صنعت ساختمان بخواهید تا با معماری یک ساختمان به صورت بصری ارتباط برقرار کند و شما با نقشه های سایت ، نقشه های طبقات ، نماهای ارتفاعی ، نماهای سطح مقطع و نقشه های جزئی روبه رو خواهید شد. در مقابل ، از یک توسعه دهنده نرم افزار بخواهید معماری نرم افزار یک سیستم نرم افزاری را با استفاده از نمودارها ارائه کند و به احتمال زیاد با جعبه ها و خطوط به هم ریخته مواجه شده باشید ... ناسازگاری متن (کدگذاری رنگ ، اشکال ، سبک های خط و غیره) ، نامگذاری مبهم ، روابط بدون مشخصه ، اصطلاحات عمومی ، گزینه های از دست رفته فناوری ، انتزاعات مخلوط و غیره...
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/sketch-1.jpg" alt="A software architecture sketch" class="img-thumbnail" />
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/sketch-2.jpg" alt="A software architecture sketch" class="img-thumbnail" />
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/sketch-3.jpg" alt="A software architecture sketch" class="img-thumbnail" />
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/sketch-4.jpg" alt="A software architecture sketch" class="img-thumbnail" />
+                        </p>
+                    </div>
+                </div>
+
+                <p>
+                    به عنوان یک صنعت ، ما زبانهای یکپارچه مدل سازی (UML) ، ArchiMate و SysML را داریم ، اما سوال اینکه آیا اینها روشهایی موثر برای برقراری ارتباط با معماری نرم افزار ارائه می دهند، اغلب بی ربط است زیرا بسیاری از تیم ها آنها را به خاطر نمودارهای ساده "جعبه ها و خطوط" (boxes and lines) کنار گذاشته اند. کنار گذاشتن این زبان های مدل سازی یک چیز است اما شاید در رقابت چابکی ، بسیاری از تیم های توسعه دهنده نرم افزار توانایی برقراری ارتباط بصری را از دست داده اند.
+                </p>
+
+                <h3>نقشه هایی از کد شما</h3>
+                <p>
+                    مدل C4 به عنوان راهی برای کمک به تیم های توسعه دهنده نرم افزار در توصیف و برقراری ارتباط معماری نرم افزار ، چه در جلسات طراحی پیش رو و چه در هنگام مستند سازی از طریق بازنگری مجدد طرح‌های یک کد موجود ، ایجاد شده است. این روش؛ روشی است برای ایجاد نقشه های راه کد شما، در سطوح مختلف از جزئیات ، به همان روشی که می توانید از چیزی مانند Google Maps برای بزرگنمایی و کوچک کردن منطقه مورد نظر خود استفاده کنید.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img src="./img/map-1.jpg" alt="Google Street View" class="img-thumbnail" />
+                        <p class="mapCaption">
+                            Google Street View مانند کد منبع ، نمای بسیار کمی از سطح و سطح دقیق را ارائه می دهد.
+                        </p>
+                    </div>
+                    <div class="col-xs-3">
+                        <img src="./img/map-2.jpg" alt="Google Maps" class="img-thumbnail" />
+                        <p class="mapCaption">
+                            اگر بزرگنمایی کنید ، پیمایش در یک محیط ناآشنا آسانتر می شود.
+                        </p>
+                    </div>
+                    <div class="col-xs-3">
+                        <img src="./img/map-3.jpg" alt="Google Maps" class="img-thumbnail" />
+                        <p class="mapCaption">
+                            بزرگنمایی بیشتر زمینه اضافی که شاید از آن آگاهی نداشته باشید را فراهم می کند.
+                        </p>
+                    </div>
+                    <div class="col-xs-3">
+                        <img src="./img/map-4.jpg" alt="Google Maps" class="img-thumbnail" />
+                        <p class="mapCaption">
+                            سطوح مختلف بزرگنمایی به شما این امکان را می دهد داستان های مختلفی را برای مخاطبان مختلف تعریف کنید.
+                        </p>
+                    </div>
+                </div>
+
+                <p>
+                    اگرچه در درجه اول معماران و توسعه دهندگان نرم افزار هستند، اما مدل C4 راهی را برای تیم های توسعه دهنده نرم افزار فراهم می کند تا به طور کارآمد و موثر با معماری نرم افزار از طریق بازنگری مجدد طرح‌های خود و یا در طراحی های پیش‌رو ، در سطوح مختلف از جزئیات ، گفتن داستان های مختلف برای مخاطبان گوناگون، طرح های اولیه انجام طراحی نمای کاربری یا مستندسازی از طریق بازنگری مجدد طرح‌ها از  یک کد موجود ارتباط برقرار کنند.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/bigbankplc-SystemContext.png" class="img-thumbnail"  />
+                        </p>
+                        <p class="smaller">
+                            سطح 1: یک نمودار<b> سطح مفهومی (Context)</b> نقطه شروع را نشان می دهد ، که نشان می دهد سیستم نرم افزار در دامنه چگونه با دنیای اطراف آن متناسب است.
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/bigbankplc-Containers.png" class="img-thumbnail"  />
+                        </p>
+                        <p class="smaller">
+                            سطح 2:  یک نمودار <b> کانتینر (Container) </b> در محدوده سیستم نرم افزار بزرگنمایی می کند و بلوک های ساختمانی سطح بالا را نشان می دهد.
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/bigbankplc-Components.png" class="img-thumbnail"  />
+                        </p>
+                        <p class="smaller">
+                            سطح 3:  یک نمودار <b>اجزا (Component)</b> در یک کانتینر بزرگنمایی می شود و اجزای داخل آن را نشان می دهد.
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <p>
+                            <img src="./img/bigbankplc-Classes.png" class="img-thumbnail"  />
+                        </p>
+                        <p class="smaller">
+                            سطح 4:  یک نمودار <b>کد (code)</b> (به عنوان مثال کلاس UML) می توان برای بزرگنمایی یک جز خاص جداگانه استفاده کرد ، که نحوه اجرای آن را نشان می دهد.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="centered">
+                    <div style="width: 66%; margin: auto">
+                        <a href="./img/c4-overview.png"><img src="./img/c4-overview.png" alt="An overview of the C4 model" class="img-thumbnail" /></a>
+                        <p class="mapCaption">
+                            سطوح مختلف بزرگنمایی به شما امکان می دهد داستان های مختلفی را برای مخاطبان مختلف تعریف کنید.
+                        </p>
+                    </div>
+                </div>
+                
+                <p>
+                    مدل C4 یک رویکرد "انتزاع اول" (abstraction-first) برای نمودارسازی معماری نرم افزار است ، که مبتنی بر انتزاعاتی که بیانگر نحوه تفکر و ساخت نرم افزار توسط معماران و توسعه دهندگان نرم افزار است میباشد و وجود مجموعه کوچکی از انتزاعات و انواع نمودار ، یادگیری و استفاده از آن را آسان می کند.
+                </p>
+
+                <h3>اهمیت نمودارهای معماری نرم افزار خوب</h3>
+                <p>
+                    نمودارهای خوب معماری نرم افزار به ارتباطات (چه در داخل و چه در خارج از تیم توسعه نرم افزار / تیم محصول) ، ورود اعضای جدید به تیم، شناسایی ریسک
+                    (به عنوان مثال  <a href="https://riskstorming.com" target="_blank">ریسک پذیری</a>),
+                    مدل سازی تهدید (threat modelling) (<a href="https://daniel.spilsbury.io/2020/04/29/c4-threat-model.html" target="_blank">به عنوان مثال با  STRIDE و LINDDUN</a>), غیره کمک می کند.
+                    نمودارها کمک می کنند تا درک همه افراد از نرم افزار ساخته شده هماهنگ شود ، بنابراین به کارآیی بیشتر تیم کمک می کند.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="Abstractions"></a>
+                <h2>انتزاع (Abstractions)</h2>
+                <p>
+                    برای ایجاد این نقشه ها از کد شما ، ابتدا به یک مجموعه مشترکی از انتزاعات برای
+                    ایجاد یک زبان همه فهم نیاز داریم که بتوانیم برای توصیف ساختار ایستایی یک سیستم
+                    نرم افزاری استفاده کنیم. مدل C4 ساختارهای ساکن یک <b>سیستم نرم افزاری</b> را از
+                    نظر <b>کانتینر</b> ،<b> اجزا </b> و <b>کد</b> در نظر می گیرد.
+                    و <b>مردم</b> از سیستم های نرم افزاری تولید شده توسط ما استفاده می کنند.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-6 centered" style="margin-top: 20px">
+                        <p>
+                            <a href="./img/abstractions.png"><img src="./img/abstractions.png" alt="Abstractions" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="caption">
+                            یک <b>سیستم نرم افزاری</b> از یک یا چند <b>کانتینر</b> تشکیل شده است (برنامه های وب ، برنامه های تلفن همراه ، برنامه های دسک تاپ ، پایگاه داده ، سیستم فایل و غیره) که هر کدام حاوی یک یا چند <b>جز </b>هستند که به نوبه خود توسط یک یا چند <b>عنصر</b> کد پیاده سازی می شوند ( به عنوان مثال کلاس ها ، رابط ها ، اشیا، ، توابع و غیره).
+                        </p>
+
+                        <br /><br />
+
+                        <p>
+                            <a href="./img/model.png"><img src="./img/model.png" alt="An example software architecture model" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="caption">
+                            یک تجسم نمونه ای از مدل معماری نرم افزار ، نشانگر ماهیت سلسله مراتبی عناصر سازنده ساختار ایستا.
+                        </p>
+                    </div>
+                    <div class="col-xs-6">
+                        <h3>شخص (Person)</h3>
+                        <p class="small">
+                            یک شخص نماینده یکی از کاربران انسانی سیستم نرم افزاری شما است (به عنوان مثال بازیگران ، نقش ها ، شخصیت ها و غیره).
+                        </p>
+
+                        <h3>سیستم نرم افزار (Software System)</h3>
+                        <p class="small">
+                            یک سیستم نرم افزاری بالاترین سطح انتزاع است و چیزی را توصیف می کند که به کاربران خود اعم از انسانی یا غیرمجاز ارزش می بخشد. این شامل سیستم نرم افزاری است که مدلسازی می کنید و سایر سیستم های نرم افزاری که سیستم نرم افزاری شما به آن وابسته است (یا بالعکس). در بسیاری از موارد ، یک سیستم نرم افزاری "تحت تملک" یک تیم توسعه دهنده نرم افزار است.
+                        </p>
+
+                        <h3>کانتینر (Container)</h3>
+                        <p class="small">
+                            منظور ما از کانتینر، به مفهومی مشابه در داکر(Docker) اشاره نمی‌کند. در اینجا کانتینر نشان دهنده یک برنامه کاربردی یا یک ذخیره داده است. کانتینر چیزی است که برای کار با سیستم نرم افزاری کلی باید در حال اجرا باشد. در اصطلاح واقعی ، کانتینر چیزی شبیه به این موارد زیر است:
+                        </p>
+                        
+                        <ul class="small">
+                            <li><b>برنامه وب سمت سرور(Server-side web application)</b>: یک برنامه وب Java EE که روی Apache Tomcat اجرا می شود ، یک برنامه ASP.NET MVC که با Microsoft IIS اجرا می شود ، یک برنامه Ruby on Rails که با WEBrick اجرا می شود ، یک برنامه Node.js و غیره</li>
+                            <li><b>برنامه وب سمت مشتری(Client-side web application)</b>: برنامه جاوا اسکریپت در مرورگر وب با استفاده از Angular ، Backbone.JS ، jQuery و غیره اجرا می شود.</li>
+                            <li><b>برنامه دسک تاپ سمت مشتری(Client-side desktop application)</b>: یک برنامه دسک تاپ ویندوز با استفاده از WPF ، یک برنامه دسک تاپ OS X که با استفاده از Objective-C نوشته شده است ، یک برنامه دسک تاپ کراس پلتفرم که با استفاده از JavaFX و غیره نوشته شده است.</li>
+                            <li><b>برنامه تلفن همراه(Mobile app)</b>: برنامه Apple iOS ، برنامه Android ، برنامه Microsoft Windows Phone و غیره.</li>
+                            <li><b>برنامه کنسول سمت سرور(Server-side console application)</b>: یک برنامه مستقل (به عنوان مثال "public static void main") ، یک فرایند دسته ای و غیره.</li>
+                            <li><b>عملکرد بدون سرور(Serverless function)</b>: یک عملکرد بدون سرور منفرد(منظور از این تکنولوژی، تکنولوژی جدیدی هست که دارد جایگزین کلود کامپیوتینگ می شود) (به عنوان مثال Amazon Lambda ، Azure Function و غیره).</li>
+                            <li><b>بانک اطلاعاتی (Database)</b>: اسکیما یا پایگاه داده در سیستم مدیریت پایگاه داده رابطه ای ، فروشگاه اسناد ، پایگاه داده گراف و غیره مانند MySQL ، Microsoft SQL Server ، پایگاه داده Oracle ، MongoDB ، Riak ، Cassandra ، Neo4j و غیره.</li>
+                            <li><b>Blob یا فروشگاه محتوا(Blob or content store) : </b>: فروشگاه Blob (منظور سرویس‌های کلودی هستند که امکان ذخیره سازی فایل‌ها شما را در ابعاد سفارشی  و وسیع می‌دهند) (به عنوان مثال Amazon S3 ، Microsoft Azure Blob Storage و غیره) یا شبکه تحویل محتوا (به عنوان مثال Akamai ، Amazon CloudFront و غیره).</li>
+                            <li><b>سیستم فایل (File system)</b>: یک سیستم فایل کامل محلی یا بخشی از یک سیستم پرونده شبکه بزرگتر (به عنوان مثال SAN ، NAS و غیره)..</li>
+                            <li><b>Shell script</b>: یک اسکریپت پوسته منفرد که به زبان Bash و غیره نوشته شده است.</li>
+                            <li><b>و غیره</b></li>
+                        </ul>
+
+                        <p class="small">
+                            کانتینر در اصل یک زمینه یا مرز است که در آن برخی کدها اجرا می شوند یا برخی از داده ها ذخیره می شوند. و هر کانتینر یک محیط قابل اجرا به صورت جداگانه/ قابل اجرا یا محیط زمان اجرا در فضای فرآیند خود است (اما نه همیشه). به همین دلیل ، ارتباط بین کانتینرها معمولاً به شکل یک ارتباط بین فرآیند است.
+                        </p>
+
+                        <h3>اجزا (Component)</h3>
+                        <p class="small">
+                            کلمه "جز یا اجزا component"  یک اصطلاح بسیار سنگین در صنعت توسعه نرم افزار است ، اما در این زمینه یک جز component گروهی از عملکردهای مرتبط است که در پشت یک رابط کاملا مشخص تعریف شده اند. اگر از زبانی مثل Java یا C #  استفاده می کنید ، ساده ترین راه برای فكر كردن به یك جزء این است كه این مجموعه از كلاس های پیاده سازی پشت یك رابط است. جنبه هایی مانند نحوه بسته بندی آن اجزا (به عنوان مثال یک جزء در مقابل بسیاری از اجزا در هر پرونده JAR ، DLL ، کتابخانه مشترک و غیره) یک وابستگی مجزا و متعامد است.
+                        </p>
+                        <p class="small">
+                            نکته مهمی که در اینجا باید به آن توجه شود این است که همه اجزای داخل یک کانتینر معمولاً در یک فضای پردازشی اجرا می شوند.
+                            <b>در مدل C4 ، اجزا واحدهای توزیع جداگانه نیستند.</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="CoreDiagrams"></a>        
+                <h2>نمودارهای اصلی (Core diagrams)</h2>
+                <p>
+                    تجسم کردن این سلسله مراتب انتزاعات پس از ایجاد مجموعه ای از نمودارهای Context ، Container ، Component و (به صورت اختیاری) Code  (به عنوان مثال کلاس UML) انجام می شود. نام C4 از همین جا آمده است.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-SystemContext.png"><img src="./img/bigbankplc-SystemContext.png" alt="A System Context diagram" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="centered">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#systemContextDiagramModal">
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                به نمودار ، کلید و شرح نمونه مراجعه کنید
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="SystemContextDiagram"></a>        
+                        <h3>سطح 1: نمودار زمینه سیستم (System Context diagram) <a href="#SystemContextDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            نمودار System Context یک نقطه شروع خوب برای نمودار نویسی و مستند سازی یک سیستم نرم افزاری است که به شما این امکان را می دهد که به عقب بروید و تصویر کلی از سیستم را مشاهده کنید. نموداری رسم کنید که سیستم شما را بصورت یک جعبه در مرکز احاطه شده توسط کاربران آن و سایر سیستمهایی که با آنها تعامل دارد ، نشان دهید.
+                        </p>
+
+                        <p>
+                            جزئیات در اینجا مهم نیست زیرا این نمای کوچک شده شماست که تصویری بزرگ از منظره سیستم را نشان می دهد. در اینجا تمرکز باید بر روی افراد (بازیگران ، نقش ها ، شخصیت ها و غیره) و سیستم های نرم افزاری باشد تا فناوری ها ، پروتکل ها و سایر جزئیات سطح پایین. این نوعی نمودار است که می توانید به افراد غیر فنی نیز نشان دهید.
+                        </p>
+
+                        <p class="small">
+                            <b>دامنه (Scope)</b>: یک سیستم نرم افزاری واحد.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اصلی (Primary elements)</b>: دامنه سیستم نرم افزاری.
+                            <br />
+                            <b>عناصر پشتیبانی کننده (Supporting elements)</b>: اشخاص (به عنوان مثال کاربران ، بازیگران ، نقش ها یا شخصیت ها) و سیستم های نرم افزاری (وابستگی های خارجی) که از نظر دامنه مستقیماً به سیستم نرم افزار متصل هستند. به طور معمول این سیستم های نرم افزاری دیگر خارج از محدوده یا مرز سیستم نرم افزاری خود شما هستند و شما مسئولیت و مالکیت آنها را ندارید.
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر (Intended audience)</b>: همه ، اعم از فنی و غیر فنی ، در داخل و خارج تیم توسعه نرم افزار.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-Containers.png"><img src="./img/bigbankplc-Containers.png" alt="A Container diagram" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="centered">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#containerDiagramModal">
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                به نمودار ، کلید و شرح نمونه مراجعه کنید
+                            </button>
+                        </p>    
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="ContainerDiagram"></a>        
+                        <h3>سطح 2: نمودار کانتینر (Container diagram) <a href="#ContainerDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            وقتی فهمیدید که سیستم شما چگونه با محیط کلی فناوری منطبق است ، قدم بعدی واقعاً مفید ، بزرگنمایی مرز سیستم با نمودار کانتینر است. "کانتینر" چیزی شبیه به یک برنامه وب سمت سرور ، برنامه تک صفحه ای ، برنامه دسک تاپ ، برنامه تلفن همراه ، طرح پایگاه داده ، سیستم فایل و غیره است. اساساً ، یک کانتینر یک واحد جداگانه قابل اجرا / استقرار است (به عنوان مثال یک فضای پردازش جداگانه ) که کد را اجرا می کند یا داده ها را ذخیره می کند.
+                        </p>
+
+                        <p>
+                            نمودار کانتینر شکل سطح بالای معماری نرم افزار و نحوه توزیع مسئولیت ها را در آن نشان می دهد. این همچنین گزینه های اصلی فناوری و نحوه ارتباط کانتینرها با یکدیگر را نشان می دهد. این یک نمودار ساده و سطح بالای متمرکز بر فناوری است که برای توسعه دهندگان نرم افزار و کارکنان پشتیبانی / عملیات نیز مفید است.
+                        </p>
+
+                        <p class="small">
+                            <b>حوزه</b>: یک سیستم نرم افزاری واحد.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اصلی</b>: کانتینرهای موجود در سیستم نرم افزار.
+                            <br />
+                            <b>عناصر پشتیبانی کننده</b>: افراد و سیستم های نرم افزاری مستقیماً به کانتینرها متصل می شوند.
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر</b>: افراد فنی در داخل و خارج تیم توسعه نرم افزار. از جمله معماران نرم افزار ، توسعه دهندگان و کارکنان پشتیبانی / عملیات.
+                        </p>
+                        <p class="small">
+                            <b>نکات</b>: این نمودار چیزی در مورد سناریوهای استقرار ، خوشه بندی(clustering) ، تکثیر ، خرابی و غیره نمی گوید.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-Components.png"><img src="./img/bigbankplc-Components.png" alt="A Component diagram" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="centered">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#componentDiagramModal">
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                به نمودار ، کلید و شرح نمونه مراجعه کنید
+                            </button>
+                        </p>    
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="ComponentDiagram"></a>        
+                        <h3>سطح 3: نمودار اجزا (Component diagram) <a href="#ComponentDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            حال شما می توانید هر کانتینر را با جزئیات بیشتر و تجزیه شده تر مشاهده کنید تا عمده ساختار اجزای سازنده و تعاملات آنها را شناسایی کنید.
+                        </p>
+
+                        <p>
+                            نمودار کامپوننت نشان می دهد که چگونه یک کانتینر از تعدادی "اجزا" تشکیل شده است ، هر یک از این اجزا چیست ، مسئولیت های آنها و جزئیات فناوری / پیاده سازی چه میباشند.
+                        </p>
+
+                        <p class="small">
+                            <b>حوزه</b>: یک کانتینر واحد.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اصلی</b>: اجزای موجود در کانتینر در محدوده.
+                            <br />
+                            <b>عناصر پشتیبانی کننده</b>: کانتینرها (در محدوده سیستم نرم افزاری) به علاوه افراد و سیستم های نرم افزاری مستقیماً به اجزا متصل می شوند.
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر</b>: معماران و توسعه دهندگان نرم افزار.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-Classes.png"><img src="./img/bigbankplc-Classes.png" alt="A UML class diagram" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="centered">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#classDiagramModal">
+                                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                به نمودار ، کلید و شرح نمونه مراجعه کنید
+                            </button>
+                        </p>    
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="CodeDiagram"></a>        
+                        <h3>سطح 4: کد (Code) <a href="#CodeDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            در آخر ، می توانید با استفاده از نمودارهای کلاس UML ، نمودارهای رابطه نهاد(entity relationship diagrams ) یا موارد مشابه بر روی هر یک از اجزا زوم کنید تا نحوه اجرای آن را به عنوان کد نشان دهید.
+                        </p>
+
+                        <p>
+                            این سطح از جزئیات اختیاری است و در صورت نیاز اغلب از طریق ابزارهایی مانند IDE در دسترس میباشد. در حالت ایده آل ، این نمودار با استفاده از ابزار (به عنوان مثال یک ابزار مدل سازی IDE یا UML) به طور خودکار ایجاد می شود ، و شما باید فقط ویژگی ها و روش هایی را نشان دهید که به شما امکان می دهد داستانی را که می خواهید بگویید، نشان دهید. این سطح از جزئیات به جز برای اجزای پیچیده و مهمترین اجزا توصیه نمی شود.
+                        </p>
+
+                        <p class="small">
+                            <b>حوزه</b>: یک اجزا واحد.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اصلی</b>: عناصر کد (به عنوان مثال کلاس ها ، رابط ها ، اشیا، ، توابع ، جداول پایگاه داده و غیره) در محدوده اجزا.
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر</b>: معماران و توسعه دهندگان نرم افزار.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="SupplementaryDiagrams"></a>
+                <h2>نمودارهای تکمیلی</h2>
+                <p>
+                    هنگامی که درک خوبی از ساختار ایستایی پیدا کردید ، می توانید نمودارهای C4 را برای نمایش جنبه های دیگر تکمیل کنید.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-SystemLandscape.png"><img src="./img/bigbankplc-SystemLandscape.png" alt="A System Landscape diagram" class="img-thumbnail" /></a>
+                        </p>
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="SystemLandscapeDiagram"></a>        
+                        <h3>نمودار چشم انداز سیستم(System Landscape diagram) <a href="#SystemLandscapeDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            مدل C4 نمای ایستایی از یک  <b>سیستم نرم افزاری واحد </b> را فراهم می کند اما در دنیای واقعی ، سیستم های نرم افزاری هرگز به صورت جداگانه فعالیت نمی کنند. به همین دلیل ، و به ویژه اگر شما مسئول مجموعه ای از سیستم های نرم افزاری باشید ، معمولاً درک اینکه چگونه همه این سیستم های نرم افزاری با هم در مرزهای یک شرکت قرار دارند ، بسیار مفید است. برای این کار ، به سادگی نمودار دیگری اضافه کنید که "در بالای" نمودارهای C4 قرار دارد ، تا منظره سیستم را از منظر IT نشان دهد. مانند نمودار System Context ، این نمودار می تواند مرز سازمانی ، کاربران داخلی / خارجی و سیستم های داخلی / خارجی را نشان دهد.
+                        </p>
+                        <p>
+                            اساساً این یک نقشه سطح بالا از سیستم های نرم افزاری با یک آزمایش C4 برای هر سیستم نرم افزاری مورد علاقه میباشد که در سطح شرکت است . از منظر عملی ، نمودار منظره سیستم در واقع فقط یک نمودار زمینه سیستم بدون تمرکز خاص بر روی یک سیستم نرم افزاری خاص است.
+                        </p>
+
+                        <p class="small">
+                            <b>حوزه</b>: یک شرکت.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اصلی</b>: دامنه افراد و سیستم های نرم افزاری مربوط به شرکت.
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر</b>: افراد فنی و غیر فنی ، در داخل و خارج تیم توسعه نرم افزار.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-SignIn.png"><img src="./img/bigbankplc-SignIn.png" alt="A dynamic diagram" class="img-thumbnail" /></a>
+                        </p>
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="DynamicDiagram"></a>        
+                        <h3>نمودار پویا (Dynamic diagram) <a href="#DynamicDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            یک نمودار پویا زمانی می تواند مفید باشد که بخواهید نشان دهید چگونه عناصر موجود در یک مدل ثابت در زمان اجرا، برای اجرای داستان کاربر ، استفاده از حروف ، ویژگی و غیره همکاری می کنند. این نمودار پویا مبتنی بر یک <a href="https://en.wikipedia.org/wiki/Communication_diagram" target="_blank">نمودار ارتباطی UML(UML sequence diagram)</a>
+                            است (که قبلاً به عنوان "نمودار همکاری UML" شناخته می شد). این شبیه به  <a href="https://en.wikipedia.org/wiki/Sequence_diagram" target="_blank">نمودار توالی  UML(UML sequence diagram)</a>
+                            است ، گرچه اجازه می دهد تا یک ترتیب آزاد از عناصر نمودار با برهم کنش شماره گذاری شده ، ترتیب را نشان دهد.
+                        </p>
+
+                        <p class="small">
+                            <b>حوزه</b>: یک شرکت ، سیستم نرم افزاری یا کانتینر.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اولیه و پشتیبانی کننده(Primary and supporting elements)</b>: به دامنه نمودار بستگی دارد. شرکت (نمودار منظره سیستم را ببینید) ، سیستم نرم افزار (به نمودارهای System Context یا Container مراجعه کنید) ، کانتینر (به نمودار کامپوننت مراجعه کنید).
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر</b>: افراد فنی و غیرفنی ، در داخل و خارج تیم توسعه نرم افزار.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5 centered">
+                        <p style="margin-top: 20px">
+                            <a href="./img/bigbankplc-LiveDeployment.png"><img src="./img/bigbankplc-LiveDeployment.png" alt="A deployment diagram" class="img-thumbnail" /></a>
+                        </p>
+                    </div>
+                    <div class="col-xs-7">
+                        <a name="DeploymentDiagram"></a>        
+                        <h3>نمودار استقرار (Deployment diagram)<a href="#DeploymentDiagram"><img src="./img/glyphicons-basic-351-link.svg" class="glyphicon" alt="Link" /></a></h3>
+                        <p>
+                            یک نمودار استقرار به شما امکان می دهد نحوه قرارگیری کانتینرها در مدل استاتیک به زیرساخت ها را نشان دهید.
+                            . این نمودار استقرار بر مبنای  <a href="https://en.wikipedia.org/wiki/Deployment_diagram" target="_blank">نمودار استقرار UML </a>است ، اگرچه برای نشان دادن نقشه برداری بین <b>کانتینرها </b> و <b>گره های استقرار</b>  ، کمی ساده شده است. گره استقرار چیزی مانند زیرساخت های فیزیکی (به عنوان مثال یک سرور یا دستگاه فیزیکی) ، زیرساخت مجازی سازی شده (به عنوان مثال IaaS ، PaaS ، یک ماشین مجازی) ، زیرساخت های کانتینر دار (به عنوان مثال یک کانتینر Docker) ، یک محیط اجرا (به عنوان مثال یک سرور پایگاه داده ، Java EE وب / سرور برنامه ، Microsoft IIS) و غیره گره های استقرار می توانند تو در تو قرار بگیرند.
+                        </p>
+
+                        <p>
+                            همچنین ممکن است بخواهید گره های زیرساختی (b)(infrastructure nodes)(/b)  مانند خدمات DNS ، تراز کننده های بار (load balancers) ، دیوارهای آتش و غیره را در آن بگنجانید.
+                        </p>
+
+                        <p class="small">
+                            <b>حوزه</b>: یک سیستم نرم افزاری واحد.
+                        </p>
+                        <p class="small">
+                            <b>عناصر اصلی</b>:گره ها و محفظه های استقرار در محدوده سیستم نرم افزار.
+                            <br />
+                            <b>عناصر پشتیبانی کننده</b>: گره های زیرساختی که در استقرار سیستم نرم افزاری استفاده می شوند.
+                        </p>
+                        <p class="small">
+                            <b>مخاطبان مورد نظر</b>: افراد فنی در داخل و خارج تیم توسعه نرم افزار. از جمله معماران نرم افزار ، توسعه دهندگان ، معماران زیرساخت و کارمندان پشتیبانی / عملیات.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="Notation"></a>
+                <h2>توجه</h2>
+                <p>
+                    مدل C4 هیچ علامت گذاری خاصی را تجویز نمی کند. یک علامت ساده که روی تخته های سفید ، کاغذ ، استیکر نوت ، کارت های فهرست نویسی (index cards) و انواع ابزارهای نمودار به خوبی کار می کند به شرح زیر است:
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="./img/notation-person.png"><img src="./img/notation-person.png" alt="Person" class="img-thumbnail" /></a>
+                        <p class="caption">
+                            شخص
+                        </p>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="./img/notation-software-system.png"><img src="./img/notation-software-system.png" alt="Software System" class="img-thumbnail" /></a>
+                        <p class="caption">
+                            سیستم نرم افزاری
+                        </p>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="./img/notation-container.png"><img src="./img/notation-container.png" alt="Container" class="img-thumbnail" /></a>
+                        <p class="caption">
+                            کانتینر
+                        </p>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="./img/notation-component.png"><img src="./img/notation-component.png" alt="Component" class="img-thumbnail" /></a>
+                        <p class="caption">
+                            اجزا
+                        </p>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="./img/notation-relationship.png"><img src="./img/notation-relationship.png" alt="Relationship" class="img-thumbnail" /></a>
+                        <p class="caption">
+                            ارتباطات
+                        </p>
+                    </div>
+                    <div class="col-xs-1">
+                    </div>
+                </div>
+
+                <p>
+                    سپس می توانید از رنگ و اشکال برای تکمیل نمودار استفاده کنید ، یا برای افزودن اطلاعات اضافی یا به سادگی برای زیباتر نشان دادن نمودار.
+                </p>
+
+                <h3>C4 و UML</h3>
+                <p>
+                    گرچه نمودارهای مثال بالا با استفاده از یک علامت گذاری "جعبه ها و خطوط" (boxes and lines) ایجاد شده اند ، اما نمودارهای اصلی را می توان با استفاده از UML با استفاده مناسب از بسته ها ، اجزا و کلیشه ها نشان داد. نمودارهای حاصل UML ، فاقد همان درجه متن توصیفی هستند ، زیرا افزودن چنین متنی با برخی از ابزارهای UML امکان پذیر نیست (یا آسان نیست).
+                </p>
+                <p>
+                    در اینجا سه مثال از نمودار System Context ، Container و Component برای مقایسه آورده شده است.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-system-context.png"><img src="./img/spring-petclinic-system-context.png" alt="A system context diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-containers.png"><img src="./img/spring-petclinic-containers.png" alt="A container diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-components.png"><img src="./img/spring-petclinic-components.png" alt="A component diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4 centered small">
+                        نمودار زمینه سیستم
+                    </div>
+                    <div class="col-xs-4 centered small">
+                        نمودار کانتینر
+                    </div>
+                    <div class="col-xs-4 centered small">
+                        نمودار اجزا
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-system-context-plantuml.png"><img src="./img/spring-petclinic-system-context-plantuml.png" alt="A system context diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-containers-plantuml.png"><img src="./img/spring-petclinic-containers-plantuml.png" alt="A container diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-components-plantuml.png"><img src="./img/spring-petclinic-components-plantuml.png" alt="A component diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-system-context-staruml.png"><img src="./img/spring-petclinic-system-context-staruml.png" alt="A system context diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-containers-staruml.png"><img src="./img/spring-petclinic-containers-staruml.png" alt="A container diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="./img/spring-petclinic-components-staruml.png"><img src="./img/spring-petclinic-components-staruml.png" alt="A component diagram" class="img-thumbnail grayscale" /></a>
+                    </div>
+                </div>
+
+                <h3>C4 و ArchiMate</h3>
+
+                <p>
+                    برای جزئیات نحوه ایجاد نمودارهای مدل C4 با ArchiMate به مدل <a href="https://www.archimatetool.com/blog/2020/04/18/c4-model-architecture-viewpoint-and-archi-4-7/" target="_blank"> C4 ، Architecture Viewpoint و Archi 4.7</a> مراجعه کنید.
+                </p>
+
+                <h3>کلید / شرح نمودار (Diagram key/legend)</h3>
+                <p>
+                    هر یادداشت  یا نشانه های مورد استفاده باید تا حد ممکن خود توصیف (self-describing) باشد ، اما <b>همه نمودارها باید یک کلید / شرح  داشته باشند</b> تا نماد را صریح و روشن بیان کنند. این موضوع برای نمودارهای ایجاد شده با یادداشت  و نشانه ها مانند UML ، ArchiMate و SysML نیز صدق می کند ، زیرا همه از یادداشت  و نشانه ها استفاده نمی کنند.
+                </p>
+
+                <p class="centered">
+                    <a href="./img/bigbankplc-Containers-key.png"><img src="./img/bigbankplc-Containers-key.png" alt="Diagram key" class="img-thumbnail" style="width: 80%" /></a>                        
+                </p>
+
+                <h3>یادداشت/علامت گذاری، یادداشت/علامت گذاری، یادداشت/علامت گذاری</h3>
+                <div class="row">
+                    <div class="col-xs-9">
+                        <p>
+                            اگرچه مدل C4 یک رویکرد انتزاعی برای اولین بار و مستقل از علامت گذاری است ، اما شما همچنان باید اطمینان حاصل کنید که نماد نمودار شما منطقی است و نمودارها قابل فهم هستند. یک روش خوب برای فکر کردن در این مورد این است که از خود بپرسید آیا هر نمودار می تواند به تنهایی وجود داشته باشد ، و بدون روایت، (بیشتر) قابل درک باشد.
+                            برای کمک می توانید از  <a href="review">چک لیست بررسی نمودار معماری نرم افزار کوتاه </a> استفاده کنید.
+                        </p>
+                    </div>
+                    <div class="col-xs-3">
+                        <p class="centered">
+                            <a href="review"><img src="./img/software-architecture-diagram-review-checklist.png" alt="Software architecture diagram review checklist" class="img-thumbnail" /></a>                        
+                        </p>
+                            </div>
+                </div>
+
+                <p>
+                    و در اینجا برخی از توصیه های مربوط به یادداشت ها را میگوییم:
+                </p>                        
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h4>نمودارها Diagrams</h4>
+                        <ul style="line-height: 150%">
+                            <li>هر نمودار باید دارای یک عنوان باشد که نوع و دامنه نمودار را توصیف می کند (به عنوان مثال "نمودار زمینه سیستم (System Context diagram)برای سیستم نرم افزاری من").</li>
+                            <li>هر نمودار باید دارای یک کلید / شرح باشد که توضیحات مورد استفاده را توضیح دهد (به عنوان مثال اشکال ، رنگ ها ، سبک های حاشیه ای ، انواع خط ها ، سرهای پیکان و غیره).</li>
+                            <li>کلمات سرنام و اختصاری (تجارت / دامنه یا فناوری) باید برای همه مخاطبان قابل درک باشد ، یا در کلید / شرح نمودار توضیح داده شود.</li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4">
+                        <h4>عناصر Elements</h4>
+                        <ul style="line-height: 150%">
+                            <li>نوع هر عنصر باید صریحاً مشخص شود (به عنوان مثال شخص ، سیستم نرم افزاری ، کانتینر یا اجزا).</li>
+                            <li>هر عنصر باید توصیف کوتاهی داشته باشد تا بتواند نمای "در یک نگاه" از مسئولیت های اصلی را ارائه دهد.</li>
+                            <li>هر کانتینر و اجزا باید دارای فناوری مشخصی باشد.</li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4">
+                        <h4>روابط Relationships</h4>
+                        <ul style="line-height: 150%">
+                                <li>هر خط باید یک رابطه یک طرفه را نشان دهد.</li>
+                                <li>هر خط باید دارای برچسب (label) باشد ، برچسب با جهت و هدف رابطه سازگار باشد (به عنوان مثال وابستگی یا جریان داده). سعی کنید در حالت ایده آل از کلمات منفرد مانند "استفاده" خودداری کنید و تا حد امکان با برچسب خاص باشید.</li>
+                                <li>روابط بین کانتینرها (معمولاً این ارتباطات بین فرآیندی را نشان می دهند) باید دارای یک فناوری / پروتکل باشد که به طور صریح برچسب گذاری شده باشد.</li>
+                            </ul>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="Examples"></a>
+                <h2>مثال ها</h2>
+                <p>
+                    در اینجا مجموعه ای از نمودارهای معماری نرم افزار به عنوان مثال بر اساس مدل C4 آورده شده است.
+                </p>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p>
+                            <a href="https://structurizr.com/share/36141#SystemContext"><img src="./img/example-big-bank-plc.png" alt="Big Bank plc" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="small centered">
+                            Big Bank plc
+                            <br />
+                            <span class="smaller centered">
+                            نمودار های (منظره سیستم ، زمینه سیستم ، کانتینر ، اجزا ، پویایی و استقرار)
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p>
+                            <a href="https://structurizr.com/share/31" target="_blank"><img src="./img/example-financial-risk-system.png" alt="Financial Risk System" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="small centered">
+                            Financial Risk System
+                            <br />
+                            <span class="smaller centered">
+                            نمودار (زمینه سیستم)
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p>
+                            <a href="https://structurizr.com/share/1#components" target="_blank"><img src="./img/example-spring-petclinic-home.png" alt="Spring PetClinic" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="small centered">
+                            Spring PetClinic
+                            <br />
+                            <span class="smaller centered">
+                            نمودار های ( زمینه سیستم ، کانتینر ، اجزا ، پویایی و استقرار)
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p>
+                            <a href="https://structurizr.com/share/4241#CustomerUpdateEvent"target="_blank"><img src="./img/example-message-bus-and-microservices.png" alt="Message bus and microservices" class="img-thumbnail" /></a>
+                        </p>
+                        <p class="small centered">
+                            مسیر پیام و مایکروسرویس ها
+                            <br />
+                            <span class="smaller centered">
+                            نمودار های (کانتینر و پویایی)
+                            </span>
+                        </p>
+                    </div>
+                </div>            
+            </div>
+        </div>
+    
+        <div class="section">
+            <div class="container small">
+                <a name="FAQ"></a>
+                <h2>سوالات متداول</h2>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>پشت صحنه مدل C4 چیست؟</h3>
+                        <p>
+                            مدل C4 توسط <a href="http://simonbrown.je" target="_blank"> سایمون براون </a>, ایجاد شده است . ایشان در حالی که به عنوان یک توسعه دهنده / معمار نرم افزار در لندن کار می کند ، به مردم در مورد معماری نرم افزار آموزش دهد. بخشی از دوره آموزشی سایمون یک تمرین طراحی بود ، جایی که به گروههایی از افراد برخی الزامات داده می شد ، از آنها خواسته می شد تا طرحی را انجام دهند و برخی نمودارها را برای بیان آن طرح ترسیم کنند.
+                        </p>
+                        <p>
+                            اگرچه این یک تمرین تمرکز طراحی بود ، اما طیف گسترده ای از نمودارها نشان داد که تجسم ایده ها مهارتی است که اکثر مردم به شدت فاقد آن هستند. مدل C4 اساساً رسمی کردن چگونگی استفاده سیمون برای تجسم معماری نرم افزار است که در طول سالها تکامل یافته است.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>الهام بخش مدل C4 چیست؟</h3>
+                        <p>
+                            مدل C4 از  <a href="https://en.wikipedia.org/wiki/Unified_Modeling_Language" target="_blank">(Unified Modeling Language) زبان مدل سازی یکپارچه </a> و
+                            the <a href="https://en.wikipedia.org/wiki/4%2B1_architectural_view_model" target="_blank">(4+1 model for software architecture) مدل 4 + 1 برای معماری نرم افزار </a>.
+                            الهام گرفته شده است. به طور خلاصه ، می توانید مدل C4 را نسخه ساده ای از مفاهیم اساسی بدانید که برای (1) توضیح و درک نحوه کار سیستم نرم افزار برای توسعه دهندگان نرم افزار آسان تر است و (2) برای به حداقل رساندن شکاف بین نرم افزار مدل معماری / توضیحات و کد منبع ایجاد شده است.
+                        </p>
+                        <p>
+                            ریشه های مدل C4 و انواع مختلف نمودار موجود در آن را می توان به جایی در سال 2006 جستجو کرد ، اگرچه نام "C4" خیلی دیرتر ، در اواخر سال 2011 آمد. این مدل در زمانی ایجاد شده است که تیم های تحت تأثیر حرکت چابک ، علاقه چندانی به استفاده از UML نداشتند.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>آیا مدل C4 گام برداشتن به عقب نیست؟ چرا دوباره UML را اختراع می کنید؟ چرا فقط از UML استفاده نمی شود؟</h3>
+                        <p>
+                            اینکه شما مدل C4 را یک گام به جلو می دانید یا یک قدم به عقب بستگی به شما و موقعیت فعلی شما دارد. اگر از UML (یا SysML ، ArchiMate و غیره) استفاده می کنید و برای شما مفید است ، آن را ادامه دهید. متأسفانه ، به نظر می رسد که استفاده از UML رو به زوال است و بسیاری از تیم ها دوباره به استفاده از ad hoc boxes و نمودارهای خطی روی آورده اند. با توجه به اینکه بسیاری از آن تیم ها مایل به استفاده از UML نیستند (به دلایل مختلف) ، مدل C4 کمک می کند تا ساختار و نظم و انضباطی در نحوه ارتباط معماری نرم افزار معرفی شود. برای بسیاری از تیم ها ، مدل C4 کافی است. و برای دیگران ، شاید گامی محکم به سمت UML باشد.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>چند نفر از مدل C4 استفاده می کنند؟</h3>
+                        <p>
+                            اگر بخواهیم پاسخ صادقانه داشته باشیم این است که هیچ کس نمی داند. سایمون شخصاً مدل C4 را به بیش از 10،000 نفر در بیش از 30 کشور جهان همراه با سخنرانی در کنفرانس ها ، فیلم ها ، کتاب ها و مقالات، آموزش داده است.. افراد دیگری نیز در حال تدریس ، صحبت و نوشتن در مورد مدل C4 هستند. هر چند میدانیم که قطعاً در سازمان هایی از شرکتهای نوپا گرفته تا نامهای جهانی در جهان از این مدل بهره برداری می شود.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>چرا کانتینر?</h3>
+                        <p>
+                            اصطلاحاتی مانند "پردازش" ، "برنامه" ، "سرور" ، "واحد قابل استقرار" و غیره همگی دارای مفاهیم مرتبط هستند ، بنابراین نام "کانتینر" به عنوان یک روش عمومی برای توصیف چیزی که در آن اجزا زندگی می کنند انتخاب شد. از یک منظر ، جای تاسف است که ساختن کانتینر محبوب شده است ، زیرا بسیاری از توسعه دهندگان نرم افزار اکنون اصطلاح "کانتینر" را با داکر مرتبط می کنند. از منظر دیگری ، گاهی اوقات برابری خوبی بین یک کانتینر در مدل C4 و یک کانتینر زیرساخت (به عنوان مثال داکر) وجود دارد.
+                        </p>
+                        <p>
+                            در حالی که بسیاری از تیم ها با موفقیت از مدل C4 استفاده می کنند ، ولی در صورت لزوم و در صورت تمایل اصطلاحات را میتوانید تغییر دهید.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>آیا می توانیم اصطلاحات را تغییر دهیم؟</h3>
+                        <p>
+                            این اصطلاحات (context, containers, components  و code) برای بسیاری از سازمانها و انواع مختلفی از نرم افزارها کاربرد دارد. با این حال ، گاهی اوقات یک سازمان اصطلاحات موجودی دارد که افراد سازمان از قبل با آن آشنا هستند. یا شاید "اجزا" و "کلاس ها" به راحتی از فناوری مورد استفاده ترسیم نشوند (به عنوان مثال زبانهای تابعی اغلب از اصطلاحات "ماژول" و "عملکرد" استفاده می کنند).
+                        </p>
+                        <p>
+                            در صورت تمایل می توانید اصطلاحی را که برای توصیف معماری نرم افزار در سطوح مختلف انتزاع استفاده می کنید ، اصلاح کنید. فقط مطمئن شوید که همه صریحاً آن را درک می کنند.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>مایکروسرویس ها و serverless چگونه را مدل می کنید؟</h3>
+                        <p>
+                            به طور کلی ، دو گزینه برای نمودارسازی مایکروسرویس ها هنگام استفاده از مدل C4 وجود دارد ، اگر چه این موضوع به دیدگاه شما از "مایکروسرویس ها" بستگی دارد.
+                        </p>
+
+                        <p>
+                            <b>رویکرد 1: هر "مایکروسرویس " متعلق به یک تیم جداگانه است</b>
+                            <br />
+                            اگر سیستم نرم افزاری شما به تعدادی از مایکروسرویس هایی که خارج از کنترل شما هستند وابسته است (به عنوان مثال متعلق به تیم جداگانه ای هستند و یا توسط آن ها اداره می شوند) ، این مایکروسرویس ها را به عنوان سیستم های نرم افزاری خارجی مدل کنید که نمی توانید داخل آنها را ببینید.
+                        </p>
+
+                        <p>
+                            <b>رویکرد 2: یک تیم واحد دارای چندین "مایکروسرویس" است</b>
+                        </p>
+                        تصور کنید که یک برنامه API (به عنوان مثال Spring Boot ، ASP.NET MVC و غیره) دارید که برای طرح پایگاه داده رابطه ای خوانده / می نویسد. صرف نظر از اینکه شما اصطلاح "مایکروسرویس" را فقط یک  برنامه API در نظر بگیرید یا ترکیبی از برنامه API و طرح پایگاه داده ... اگر ریز سرویس ها بخشی از یک سیستم نرم افزاری هستند که شما در حال ساخت آن هستید (یعنی مالک آنها هستید) ، هر مورد قابل استفاده را به عنوان کانتینر مدل کنید. به عبارت دیگر ، شما باید دو کانتینر را نشان دهید: برنامه API و طرح پایگاه داده. در صورت تمایل می توانید جعبه ای را به دور این دو کانتینر بکشید تا مشخص شود که آنها به هم مرتبط هستند.
+                        </p>
+
+                        <p>
+                            همین امر برای توابع بدون سرور / lambdas / و غیره نیز صادق است. با آنها به عنوان سیستم های نرم افزاری یا کانتینرهای مبتنی بر مالکیت رفتار کنید.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>چگونه سیستم های نرم افزاری بزرگ و پیچیده را نمودار می کنید؟</h3>
+                        <p>
+                            حتی با وجود یک سیستم نرم افزاری نسبتاً کوچک ، امتحان کردن و گنجاندن کل داستان در یک نمودار واحد جذاب است. به عنوان مثال ، اگر یک برنامه وب دارید ، ایجاد یک نمودار تک مولفه که تمام اجزای سازنده آن برنامه وب را نشان دهد ، منطقی به نظر می رسد. تا زمانی که سیستم نرم افزاری شما واقعاً به این کوچکی نباشد ، احتمالاً فضای موجود بر روی بوم نمودار شما تمام خواهد شد و یا پیدا کردن نظم و چیدمانی که در اثر انبوهی از خطوط همپوشانی ایجاد نشده باشد دشوار خواهد بود. استفاده از بوم نمودار بزرگتر گاهی می تواند کمک کند ، اما تفسیر و درک نمودارهای بزرگ معمولاً دشوار است زیرا بار شناختی آن خیلی زیاد است. و اگر کسی نمودار را درک نکند ، هیچ کس نمی خواهد آن را بررسی کند.
+                        </p>
+                        <p>
+                            درعوض ، نترسید که آن نمودار پیچیده را به تعداد بیشتری از نمودارهای ساده تقسیم کنید ، هر یک با تمرکز خاص در یک قسمت تجاری ، منطقه عملکردی ، گروه بندی عملکردی ، زمینه محدود ، مورد استفاده ، تعامل کاربر ، مجموعه ویژگی ها و غیره، نکته اصلی این است که اطمینان حاصل کنید هر یک از نمودارها جداگانه قسمت متفاوتی از همان داستان کلی را در همان سطح انتزاع بیان می کند.
+                        </p>
+
+                        <p>
+                            همچنین برای رویکرد جایگزین ، به <a href="#Modelling">نمودار و مدل سازی </a> مراجعه کنید.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>آیا نمودارها به سرعت منسوخ می شوند؟</h3>
+                        <p>
+                            به دلیل ماهیت سلسله مراتبی مدل C4 ، هر نمودار با سرعت متفاوتی تغییر خواهد کرد.
+                        </p>
+                        
+                        <ul>
+                            <li><b>نمودار زمینه سیستم (Context)</b>: در بیشتر موارد ، نمودار زمینه سیستم بسیار آهسته تغییر خواهد کرد ، زیرا این توصیف منظره ای است که سیستم نرم افزار در آن کار می کند.</li>
+                            <li><b>(Container)نمودار کانتینر </b>: تا زمانی که شما در حال ساخت یک سیستم نرم افزاری نیستید که از ریز سرویس ها یا lambdas / توابع / غیره بدون سرور استفاده زیادی کند ، نمودار کانتینر نیز به آرامی تغییر خواهد کرد.</li>
+                            <li><b>(Component) نمودار اجزا یا مولفه</b>: برای هر سیستم نرم افزاری تحت توسعه فعال ، نمودارهای اجزا ممکن است به طور مکرر تغییر کنند زیرا تیم کد را به اجزای منسجم اضافه ، حذف یا بازسازی می کند. خودکار سازی تولید این سطح از جزئیات با ابزار کمک می کند.</li>
+                            <li><b>(Code) نمودار کد</b>: نمودارهای سطح 4 کد (به عنوان مثال کلاس) در صورت توسعه فعال بودن کد کد ، به سرعت بالقوه منسوخ می شوند. به همین دلیل ، توصیه می شود (1) به هیچ وجه آنها را ایجاد نکنید یا (2) با استفاده از ابزاری مانند IDE خود را بر اساس تقاضا تولید کنید.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>چرا مدل C4 فرایندهای تجاری ، گردش کار ، ماشین های حالت ، مدل دامنه ، مدل داده و غیره را پوشش نمی دهد؟</h3>
+                        <p>
+                            تمرکز مدل C4 ساختارهای ساکن است که یک سیستم نرم افزاری را در سطوح مختلف انتزاع تشکیل می دهد. اگر می خواهید جنبه های دیگر را توصیف کنید ، در صورت تمایل نمودارهای C4 را با نمودارهای UML ، نمودارهای BPML ، نمودارهای ArchiMate ، نمودارهای رابطه موجودی و غیره تکمیل کنید.
+                        </p>
+                    </div>                            
+                    <div class="col-xs-4">
+                        <h3>مدل C4 در مقابل UML ، ArchiMate و SysML؟</h3>
+                        <p>
+                            اگرچه نت های موجود مانند UML ، ArchiMate و SysML از قبل وجود دارند ، اما به نظر نمی رسد بسیاری از تیم های توسعه نرم افزار از آنها استفاده کنند. غالباً به این دلیل است که تیم ها این نمادها را به اندازه کافی نمی دانند ، آنها را بسیار پیچیده می دانند ، فکر می کنند با رویکردهای چابک سازگار نیستند یا ابزار لازم را ندارند
+                        </p>
+
+                        <p>
+                            اگر قبلاً با موفقیت از یکی از این نشانه ها برای برقراری ارتباط با معماری نرم افزار استفاده کرده اید و کار می کند ، با آن همراه باشید. در غیر این صورت ، مدل C4 را امتحان کنید. و اگر می خواهید از مکمل کردن نمودارهای C4 با نمودارهای حالت UML ، نمودار زمان بندی و غیره نترسید.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>آیا می توانیم C4 و arc42 را ترکیب کنیم؟</h3>
+                        <p>
+                            بله ، بسیاری از تیم ها این کار را انجام می دهند و مدل C4 به شرح زیر با <a href="http://arc42.org" target="_blank">الگوی مستندات arc42 </a> سازگار است.
+                        </p>
+
+                        <ul>
+                          <li>Context and Scope =&gt; System Context diagram</li>
+                          <li>Building Block View (level 1) =&gt; Container diagram</li>
+                          <li>Building Block View (level 2) =&gt; Component diagram</li>
+                          <li>Building Block View (level 3) =&gt; Class diagram</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>آیا مدل C4 حاکی از روند طراحی یا ساختار تیمی است؟</h3>
+                        <p>
+                            یک تصور غلط رایج این است که روند طراحی یک تیم باید از سطوح موجود در سلسله مراتب مدل C4 پیروی کند ، شاید افراد مختلف در تیم مسئول سطوح مختلف نمودار باشند. به عنوان مثال ، یک تحلیلگر تجارت نمودار زمینه سیستم را ایجاد می کند ، معمار نمودار کانتینر را ایجاد می کند ، در حالی که توسعه دهندگان از سایر جزئیات نگهداری می کنند.
+                        </p>
+                        <p>
+                            اگرچه مطمئناً می توانید از مدل C4 به این روش استفاده کنید ، این الگوی مورد نظر یا توصیه شده برای استفاده نیست. مدل C4 فقط روشی برای توصیف یک سیستم نرم افزاری ، از سطوح مختلف انتزاع است ، و هیچ چیزی راجع به روند تحویل نرم افزار نشان نمی دهد.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>از C4 برای توصیف کتابخانه ها ، چارچوب ها و SDK استفاده می کنید؟</h3>
+                        <p>
+                            مدل C4 واقعاً برای مدلسازی یک سیستم نرم افزاری ، در سطوح مختلف انتزاع ، طراحی شده است. برای مستند کردن یک کتابخانه ، چارچوب یا SDK ، بهتر است از چیزی مانند UML استفاده کنید. روش دیگر ، شما می توانید از مدل C4 برای توصیف یک مثال استفاده از چارچوب ، کتابخانه یا SDK خود استفاده کنید. شاید با استفاده از کدگذاری رنگی مشخص کنید که کدام قسمت از سیستم نرم افزار در مقایسه با آنچه برای شما ارائه شده است ، سفارش داده شده است.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>برنامه های تحت وب؛ یک یا دو کانتینر</h3>
+                        <p>
+                            اگر در حال ساخت یک برنامه وب سمت سرور هستید (به عنوان مثال Spring MVC ، ASP.NET ، Ruby on Rails ، Django و غیره) که عمدتا محتوای HTML ثابت ایجاد می کند ، این یک کانتینر واحد میباشد. اگر مقدار قابل توجهی از کدهای جاوا اسکریپت توسط برنامه وب سمت سرور تولید شده باشد (به عنوان مثال یک برنامه تک صفحه ای که با استفاده از Angular ساخته شده است) ، این دو کانتینر است.
+                            <a href="./img/bigbankplc-Containers.png">در اینجا یک مثال آورده شده است.</a>.
+                        </p>
+                        <p>
+                            اگرچه ، در زمان استقرار ، برنامه وب سمت سرور شامل کد سمت سرور و سمت سرویس گیرنده است ، اما با سرویس گیرنده و سرور به عنوان دو کانتینر جداگانه ، این واضح است که این دو فضای پردازش جداگانه هستند و از طریق یک پردازش بین یک دیگر ارتباط برقرار می کنند / مکانیسم ارتباط از راه دور (به عنوان مثال JSON / HTTPS). همچنین این امر زمینه ای برای بزرگنمایی هر کانتینر را به طور جداگانه فراهم می کند تا اجزای داخل آنها را نشان دهد.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>آیا خطوط باید وابستگی ها یا جریان داده ها را نشان دهند؟</h3>
+                        <p>
+                            این انتخاب شماست بعضی اوقات نمودارها بهتر نشان می دهند که روابط وابستگی نشان داده می شوند (به عنوان مثال موارد استفاده ، خواندن مطالب و غیره) ، و گاهی جریان داده ها (به عنوان مثال رویدادهای بروزرسانی مشتری) بهتر کار می کنند. هر کدام را که انتخاب می کنید ، مطمئن شوید که شرح خط با جهت پیکان مطابقت داشته باشد.
+                        </p>
+                        <p>
+                            همچنین لازم به یادآوری است که بیشتر روابط می توانند به هر صورت بیان شوند و هرچه صریح تر باشید ، بهتر است. به عنوان مثال ، توصیف رابطه به عنوان " بروزرسانی رویدادهای مشتری را به" می فرستد "می تواند توصیفی بیش از" بروزرسانی رویدادهای مشتری "باشد.
+                        </p>
+                    </div>                            
+                    <div class="col-xs-4">
+                        <h3>آیا Java Java JAR, C# assembly, DLL, module و ... یک کانتینر می باشند؟</h3>
+                        <p>
+                            به طور معمول اینگونه نیست. کانتینر یک سازه زمان اجرا است ، مانند یک برنامه کاربردی. در حالی که از فایلهای Java JAR ، مجموعه های C # ، DLL ها ، ماژول ها و غیره برای سازماندهی کد در آن برنامه ها استفاده می شود.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>آیا Java JAR, C# assembly, DLL, module, package, namespace و غیره یک a component می باشند؟</h3>
+                        <p>
+                            شاید اما ، دوباره ، به طور معمول نه. مدل C4 بیشتر از اینکه واحدهای سازمانی مانند پرونده های Java JAR ، مجموعه های C # ، DLL ها ، ماژول ها ، بسته ها ، فضای نام ها یا ساختار پوشه ها باشد ، نشان دادن واحدهای زمان اجرا (کانتینرها) و نحوه تقسیم عملکرد در آنها (اجزا) است.
+                        </p>
+                        <p>
+                            البته ، ممکن است یک نقشه برداری یک به یک بین این سازه ها و یک مولفه وجود داشته باشد. به عنوان مثال، اگر در حال ساخت یک معماری شش ضلعی هستید ، ممکن است برای هر جز یا مولفه یک فایل جاوا JAR یا مونتاژ C # ایجاد کنید. از طرف دیگر ، یک مولفه ممکن است با استفاده از کد تعدادی از پرونده های JAR پیاده سازی شود ، این معمولاً همان اتفاقی است که هنگام شروع به بررسی چارچوب ها / کتابخانه های third party و نحوه تعبیه شدن آنها در پایگاه کد شما می افتد.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>آیا باید دربرگیرنده Message bus ها ، API gateway ، مش سرویس ها و غیره بود؟</h3>
+                        <p>
+                            اگر دو سرویس A و B دارید که با ارسال پیام از طریق گذرگاه پیام (صرف نظر از موضوعات ، صف ها ، p2p ، انتشار/ اشتراک و غیره) یا واسطه دیگری (به عنوان مثال API gateway یا مش سرویس) با یکدیگر ارتباط برقرار می کنند ، چند گزینه پیش رو دارید. اولین گزینه نمایش سرویس A ارسال پیام به واسطه است و متعاقباً واسطه آن پیام را به سرویس B ارسال می کند. گرچه دقیق است ، ماهیت نمودار "توپی و گفتاری" تمایل دارد تا این مفهوم را که وجود رابطه ای بین تولیدکننده پیام و مصرف کننده است پنهان کند.
+                        </p>
+                        <p>
+                            روش دیگر این است که واسطه را حذف کنیم و در عوض از علامت گذاری استفاده کنیم (به عنوان مثال توصیف متنی ، کدگذاری رنگ ، سبک خط و غیره) به این معنی است که تعامل بین سرویس A و B از طریق یک واسطه اتفاق می افتد. این روش منجر به ایجاد نمودارهایی می شود که داستان روشن تری را بیان می کنند.
+                        </p>
+                    </div>                            
+                    <div class="col-xs-4">
+                        <h3>آیا سرویس ها و خدمات ذخیره سازی اطلاعات باید به عنوان سیستم های نرم افزاری یا کانتینر نشان داده شوند؟</h3>
+                        <p>
+                            یک سوال متداول این است که آیا سرویس هایی مانند Amazon S3 ، RDS آمازون ، پایگاه داده Azure SQL ، شبکه های تحویل محتوا و غیره باید به عنوان سیستم های نرم افزاری یا کانتینر نشان داده شوند؟ به هر حال ، اینها خدمات خارجی هستند که اکثر ما مالک آنها نیستیم یا آنها را اداره نمی کنیم.
+                        </p>
+                        <p>
+                            اگر در حال ساخت یک سیستم نرم افزاری هستید که از Amazon S3 برای ذخیره داده استفاده می کند ، درست است که S3 را خودتان اجرا نمی کنید ، اما مالکیت و مسئولیت آن را برای bucketهایی که استفاده می کنید دارید. به طور مشابه با RDS آمازون ، شما (کم و بیش) کنترل کاملی بر هر طرح داده پایگاه داده ای که ایجاد می کنید ، دارید. به همین دلیل با آنها به عنوان کانتینر برخورد کنید زیرا آنها بخشی جدایی ناپذیر از معماری نرم افزار شما هستند ، اگرچه در جای دیگری میزبانی می شوند.
+                        </p>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>آیا مدل C4 عموماً قابل استفاده است؟</h3>
+                        <p>
+                            مدل C4 به صورت سفارشی برای کمک به توصیف ، مستند سازی و نمودار سیستم های نرم افزاری سفارش داده شده ، طراحی شده است. از این منظر ، می توان از مدل C4 برای توصیف انواع معماری نرم افزار (یکپارچه یا توزیع شده) ، ساخته شده در انواع زبان های برنامه نویسی ، مستقر در سیستم عامل های مختلف (در فضای داخلی یا ابری) استفاده کرد.
+                        </p>
+                        <p>
+                            راه حل هایی که شاید کمتر مناسب مدل C4 باشند شامل سیستم های تعبیه شده / سیستم عامل و راه حل هایی هستند که به جای سفارشی کردن ، به شخصی سازی زیاد پاسخ می دهند (به عنوان مثال SAP و Salesforce). حتی با وجود این راه حل ها ، ممکن است نمودار System Context و Container برای شما مفید باشد.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="Modelling"></a>
+                <h2>نمودار نویسی در مقابل مدل سازی (Diagramming vs modelling)</h2>
+                <p>
+                    به عنوان یک صنعت ، ما تمایل داشته ایم نمودار نویسی را بر مدل سازی ترجیح دهیم ، اساساً به این دلیل که موانع ورود نسبتاً کم است و به همین دلیل به عنوان یک کار بسیار ساده تر دیده می شود. وقتی در حال طراحی نمودار هستید ، معمولاً با استفاده از ابزاری (مثلاً Microsoft Visio یا تخته وایت برد) یک یا چند نمودار جداگانه ، (اغلب با یک علامت ad hoc) ، ایجاد می کنید که از نظر معنایی نمودارهای شما چیزی قابل فهمی نمیباشند. زبان دامنه ابزارهای نمودارسازی در واقع فقط جعبه ها و خطوط میباشند، بنابراین نمی توانید سوالاتی مانند "اجزا X چه وابستگی هایی دارد؟" از آنها بپرسید. علاوه بر این ، استفاده مجدد از عناصر نمودار در نمودارها معمولاً با کپی برداری (به عنوان مثال کپی و جایگذاری) انجام می شود ، بدین ترتیب وقتی چنین عناصری را تغییر نام می دهید،  مسئولیت همگام نگه داشتن نمودارها را به عهده شما می گذارد. در اینجا لازم به ذکر است که مدل C4 صرف نظر از اینکه شما نمودار طراحی میکنید یا مدلسازی می کنید ، می تواند مورد استفاده قرار گیرد ، اما هنگام پیشرفت از نمودار به مدل سازی ، فرصت های جالبی وجود دارد.
+                </p>
+
+                <p>
+                    با مدل سازی ، شما در حال ساخت یک مدل غیر بصری از چیزی (به عنوان مثال معماری نرم افزار یک سیستم نرم افزاری) هستید ، و سپس نماهای مختلف (به عنوان مثال نمودارها) را در بالای آن مدل ایجاد می کنید. این به کمی دقت بیشتری نیاز دارد ، اما نتیجه یک تعریف واحد از همه عناصر و روابط بین آنها است. این ، به نوبه خود ، به ابزارهای مدل سازی اجازه می دهد تا معنایی آنچه را که می خواهید انجام دهید ، درک کنند و اطلاعات اضافی را در بالای مدل ارائه دهند. همچنین به ابزارهای مدل سازی امکان ارائه تجسم های جایگزین ، اغلب به صورت خودکار را می دهد.
+                </p>
+
+                <p>
+                    یکی از سوالات متداول در مورد نمودارسازی سیستم های نرم افزاری بزرگ و پیچیده است. هنگامی که شروع به داشتن بیش از 20 عنصر (به علاوه روابط بین آنها) بر روی نمودار دارید ، نمودار حاصل خیلی سریع شروع به بهم ریختگی می کند. به عنوان مثال ، تصویر 1 (در زیر) یک نمودار اجزا برای یک کانتینر است.
+                </p>
+                <p>
+                    یک رویکرد برای مقابله با این مسئله این است که همه اجزا را در یک نمودار نشان ندهید و در عوض چندین نمودار ایجاد کنید ، یکی از هر "قطعه" از طریق کانتینر (تصویر 2 ، در زیر) ترسیم کنید. این روش مطمئناً می تواند کمک کند ، اما جای سوال است که آیا نمودارهای حاصل مفید هستند؟ آیا می خواهید از آنها استفاده کنید و اگر چنین است ، برای چه استفاده می کنید؟ گرچه نمودارهای System Context و Container بسیار مفید هستند ، نمودارهای کامپوننت برای سیستم های نرم افزاری بزرگ معمولاً ارزش کمتری دارند زیرا به روز بودن آنها دشوارتر است و ممکن است متوجه شوید که افراد بسیار کمی به هر حال به آنها نگاه می کنند ، به خصوص اگر در اسناد یا ارائه ها ارائه نشوند.
+                </p>
+
+                <div class="row">
+                    <div class="col-xs-3 centered">
+                        <div class="img-thumbnail" style="height: 120px; overflow-y: hidden">
+                            <a href="./img/modelling-1.png"><img src="./img/modelling-1.png" alt="A large and cluttered diagram" class="img-responsive" /></a>
+                        </div>
+                        <p class="mapCaption">
+                            هنگامی که بیش از 20 elements عنصر بر روی نمودار داشته باشید ، نمودار خیلی سریع شروع به بهم ریختگی می کند.
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <div class="img-thumbnail" style="height: 120px; overflow-y: hidden">
+                            <a href="./img/modelling-2.png"><img src="./img/modelling-2.png" alt="A smaller diagram showing an individual slice" class="img-responsive" /></a>
+                        </div>
+                        <p class="mapCaption">
+                            ایجاد نمودارهای متعدد ، یک نمودار در هر "برش" ، می تواند کمک کند ، گرچه نمودارهای حاصل بسیار ساده هستند و تلاش لازم برای به روز نگه داشتن آنها را افزایش می دهد.
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <div class="img-thumbnail" style="height: 120px; overflow-y: hidden">
+                            <a href="./img/modelling-3.png"><img src="./img/modelling-3.png" alt="An alternative visualisation" class="img-responsive" /></a>
+                        </div>
+                        <p class="mapCaption">
+                            به جای ایجاد نمودار ، می توانید از تجسم های جایگزین استفاده کنید. این تجسم وابستگی بین اجزای داخل کانتینر را نشان می دهد.
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <div class="img-thumbnail" style="height: 120px; overflow-y: hidden">
+                            <a href="./img/modelling-4.png"><img src="./img/modelling-4.png" alt="An alternative visualisation" class="img-responsive" /></a>
+                        </div>
+                        <p class="mapCaption">
+                            و این تجسم جایگزین تمام عناصر و روابط موجود در مدل را نشان می دهد كه برای نشان دادن زیرمجموعه ای از مدل فیلتر شده است.
+                        </p>
+                    </div>
+                </div>  
+                
+                <p>
+                    غالباً ، نمودارها خود هدف نهایی نیستند و تیم ها از نمودارها برای پاسخ به سوالات دیگری که دارند استفاده می کنند ، از جمله: "اجزا X چه وابستگی هایی دارد؟" در این صورت ، ساخت یک مدل به شما امکان می دهد بدون تلاش اضافی برای ایجاد نمودار ، به چنین سوالاتی پاسخ دهید. به عبارت دیگر ، هنگامی که مدلی دارید ، می توانید آن را به روشهای مختلف (تصاویر 3 و 4 ، زیر) تجسم کنید ، و به شما کمک می کند تا به سوالات واقعی که می خواهید جواب دهید ، پاسخ دهید. نمودارها مطمئناً راهی خارق العاده برای برقراری ارتباط با معماری نرم افزار هستند ، اما سایر تجسم ها گاهی می توانند به پاسخ دادن به سوالات اساسی که ممکن است داشته باشید کمک کنند.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="Metamodel"></a>
+                <h2>متامدل Metamodel</h2>
+                <p>
+                    اگر شما علاقه مند به استفاده از مدل C4 یا ابزار building  برای پشتیبانی از آن هستید ، در اینجا اطلاعاتی در مورد متامدل اصلی آورده شده است.
+                </p>
+
+                <h3>عناصر و روابط</h3>
+                <table class="table table-striped small" style="direction: inherit">
+                    <tr>
+                        <th>نوع عنصر</th>
+                        <th>والدین (Parent)</th>
+                        <th>ویژگی ها</th>
+                    </tr>
+        
+                    <tr>
+                        <td><b>شخص Person</b></td>
+                        <td>هیچی None</td>
+                        <td>
+                            <ul>
+                                <li>نام Name<sup>*</sup></li>
+                                <li>توضیحات Description</li>
+                                <li>مکان (داخلی یا خارجی) Location (Internal or External)</li>
+                            </ul>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b> سیستم نرم افزاری</b></td>
+                        <td>None هیچی</td>
+                        <td>
+                            <ul>
+                                <li> نام<sup>*</sup></li>
+                                <li> توضیحات</li>
+                                <li>Location مکان(داخلی یا خارجی)</li>
+                                <li>مجموعه کانتینرهایی که سیستم نرم افزاری را تشکیل می دهند</li>
+                            </ul>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b> کانتینر</b></td>
+                        <td>یک سیستم نرم افزاری</td>
+                        <td>
+                            <ul>
+                                <li>نام<sup>*</sup></li>
+                                <li>توضیحات</li>
+                                <li>تکنولوژی</li>
+                                <li>مجموعه اجزای موجود در کانتینر</li>
+                            </ul>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b>مولفه یا اجزا</b></td>
+                        <td>یک کانتینر</td>
+                        <td>
+                            <ul>
+                                <li>نام<sup>*</sup></li>
+                                <li>توضیحات</li>
+                                <li>تکنولوژی</li>
+                                <li>مجموعه عناصر کد (به عنوان مثال کلاس ها ، رابط ها و غیره) که مولفه یا اجزا توسط آنها پیاده سازی می شود</li>
+                            </ul>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b>عنصر کد</b></td>
+                        <td>یک جزء یا مولفه</td>
+                        <td>
+                            <ul>
+                                <li>نام<sup>*</sup></li>
+                                <li>توضیحات</li>
+                                <li>کاملاً واجد شرایط</li>
+                            </ul>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b>ارتباطات</b><sup>**</sup></td>
+                        <td></td>
+                        <td>
+                            <ul>
+                                <li>توضیحات</li>
+                                <li>تکنولوژی</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            
+                <p class="small">
+                    <sup>*</sup> همه عناصر موجود در مدل باید دارای یک نام باشند ، و این نام باید در زمینه والدین(Parent) منحصر به فرد باشد.
+                    <br />
+                    <sup>**</sup> روابط بین هر یک از عناصر موجود در مدل ، به هر دو جهت مجاز است.
+                </p>
+
+                <h3>Views منظره ها</h3>
+                <table class="table table-striped small" style="direction: rtl">
+                    <tr>
+                        <th width="25%">نوع منظره</th>
+                        <th width="25%">محدوده</th>
+                        <th width="25%">عناصر مجاز</th>
+                        <th width="25%"></th>
+                    </tr>
+        
+                    <tr>
+                        <td><b>1. System Context</b></td>
+                        <td>یک سیستم نرم افزاری</td>
+                        <td>
+                            <ul>
+                                <li>سیستم های نرم افزاری</li>
+                                <li>اشخاص</li>
+                            </ul>
+                        </td>
+                        <td class="centered">
+                            <a href="./img/bigbankplc-SystemContext.png"><img src="./img/bigbankplc-SystemContext.png" alt="A System Context diagram" class="img-thumbnail" /></a>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b>2. Container</b></td>
+                        <td>یک سیستم نرم افزاری</td>
+                        <td>
+                            <ul>
+                                <li>سیستم های نرم افزاری</li>
+                                <li>اشخاص</li>
+                                <li>کانتینرهای موجود در سیستم نرم افزار</li>
+                            </ul>
+                        </td>
+                        <td class="centered">
+                            <a href="./img/bigbankplc-Containers.png"><img src="./img/bigbankplc-Containers.png" alt="A Container diagram" class="img-thumbnail" /></a>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><b>3. Component</b></td>
+                        <td>یک کانتینر</td>
+                        <td>
+                            <ul>
+                                <li>سیستم های نرم افزاری</li>
+                                <li>اشخاص</li>
+                                <li>محدوده های دیگر موجود در سیستم نرم افزاری والد کانتینر در دامنه</li>
+                                <li>محدوده اجزای موجود در کانتینر</li>
+                            </ul>
+                        </td>
+                        <td class="centered">
+                            <a href="./img/bigbankplc-Components.png"><img src="./img/bigbankplc-Components.png" alt="A Component diagram" class="img-thumbnail" /></a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><b>4. Code</b></td>
+                        <td>یک جزء یا مولفه</span></td>
+                        <td>
+                            <ul>
+                                <li>عناصر کد (به عنوان مثال کلاس ها ، رابط ها و غیره) که برای پیاده سازی مولفه یا جزء در محدوده استفاده می شوند</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <a href="./img/bigbankplc-Classes.png"><img src="./img/bigbankplc-Classes.png" alt="A UML class diagram" class="img-thumbnail" /></a>
+                        </td>
+                    </tr>
+                </table>            
+            </div>
+        </div> 
+
+        <div class="section">
+                <div class="container">
+                    <a name="MoreInformation"></a>
+                    <h2>اطلاعات بیشتر</h2>
+                    <p>
+                        اگر به دنبال اطلاعات بیشتر در مورد تجسم معماری نرم افزار و مدل C4 هستید ، منابع زیر توصیه می شود.
+                        همچنین می توانید برای گفتگو با دیگران ، پرسیدن سوال و غیره به<a href="https://join.slack.com/t/soft-arch-for-devs/shared_invite/enQtMzM4NDIzODM0MzI3LWIyZjViNzFhNTZmMjc0YzhlMmMyYjRhOTU5MjQ4MGY4NjA1Nzc5ZjllOGFmOWI4NGM1ZWUwYjkxMzM0OWU5NjI" target="_blank">"فضای معماری نرم افزار برای توسعه دهندگان"</a> فضای کاری Slack بپیوندید.
+                    </p>
+    
+                    <div class="row">
+                            <div class="col-xs-4 centered">
+                                <p>
+                                    <a href="https://leanpub.com/b/software-architecture" target="_blank"><img src="./img/sa4d-2.png" alt="Software Architecture for Developers: Volumes 1 & 2" class="img-thumbnail" /></a>
+                                </p>
+        
+                                <p class="small">
+                                    این کتاب الکترونیکی سایمون بروون <a href="https://leanpub.com/b/software-architecture">Software Architecture for Developers</a> (جلد 2) است,
+                                    که برای خرید از Leanpub به عنوان کتاب الکترونیکی در قالب های PDF ، EPUB و MOBI در دسترس است. این یک راهنمای کوتاه برای تجسم ، مستند سازی و کاوش در معماری نرم افزار شماست.
+                                </p>
+                            </div>
+                            <div class="col-xs-8 centered">
+                            <p class="embed-responsive embed-responsive-16by9 centered img-thumbnail">
+                                <iframe src="https://www.youtube.com/embed/x2-rSnhpw0g" frameborder="0" allowfullscreen></iframe>
+                            </p>
+                            <p style="font-size: 11px">
+                                <b>تجسم معماری نرم افزار با مدل C4</b>
+                                <br />
+                                Agile on the Beach 2019 - Falmouth, England - July 2019
+                            </p>
+                        </div>
+                    </div>    
+     
+                    <p class="small centered">
+                        همچنین پادکست هایی با سیمون براون وجود دارد ، جایی که وی در مورد مدل C4 بحث می کند. شامل
+                        <a href="https://softwareengineeringdaily.com/2017/06/20/software-architecture-with-simon-brown/" target="_blank">Software Engineering Daily</a> and
+                        <a href="http://www.se-radio.net/2015/06/episode-228-software-architecture-sketches-with-simon-brown/" target="_blank">Software Engineering Radio</a>.
+                    </p>
+                </div>
+            </div>
+    
+        <div class="section">
+            <div class="container">
+                <a name="Adopting"></a>
+                <h2>استفاده از مدل C4</h2>
+                <p>
+                    اگر در پی آن هستید که آیا مدل C4 برای تیم شما مناسب است ، بهترین روش این است که فقط آن را امتحان کنید. یک ساعت را اختصاص دهید ، یک تخته وایت برد بگیرید و برای هر کاری که بر روی آن تمرکز دارید یک نمودار سیستم زمینه (System Context diagram) ترسیم کنید. اگر به نظر شما مفید است ، یک ساعت دیگر وقت بگذارید تا نمودار Container را برای همان سیستم نرم افزاری ترسیم کنید. برای بسیاری از تیم ها ، این دو سطح جزئیات کافی است. اگر فکر می کنید در ترسیم نمودارهای کامپوننت ارزشی برای شما وجود دارد ، آن را نیز امتحان کنید. نمودارهای کامپوننت نوسان و جزییات بیشتری دارند ، بنابراین شما باید شروع به بررسی اتوماتیک این سطح از جزئیات در صورت امکان را داشته باشید، به طوری که نمودارها همیشه کد را منعکس می کنند.
+                </p>
+
+                <p>
+                    اگر به عنوان بخشی از روشهای کاری خود ، گذشته نگری دارید ، بحث در مورد نمودارها را فراموش نکنید. آیا مفید هستند؟ آیا دیگران از آنها استفاده می کنند؟ آیا آنها به روز هستند؟ آیا می توانیم از جزئیات بیشتری استفاده کنیم؟ یا اینکه نمودارهای ما خیلی دقیق هستند و به سرعت از رده خارج می شوند؟ آیا ابزار کافی است؟ آیا هرکسی در صورت لزوم به نمودار دسترسی دارد؟
+                </p>
+
+                <p>
+                    <a href="https://architectis.je" target="_blank">آموزش حضوری و آنلاین </a>برای کمک به شما در معرفی مدل C4 یا مقیاس دانش مدل C4 در سازمان شما موجود است.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="Tooling"></a>
+                <h2>ابزار</h2>
+                <p>
+                    برای جلسات طراحی ، ممکن است یک صفحه سفید یا کاغذ فلیپ چارت برای همکاری بهتر داشته باشید و به سرعت تکرار شود. برای مستندات طولانی مدت ، ابزارهای مدل سازی و نمودارسازی زیر می توانند به ایجاد نمودارهای معماری نرم افزار بر اساس مدل C4 کمک کنند.
+                </p>
+
+                <br />
+
+                <div class="centered">
+                    ابزارهای مدل سازی <span class="smaller">(توصیه شده - <a href="https://dev.to/simonbrown/modelling-software-architecture-with-plantuml-56fc" target="_blank">چرا؟</a>)</span>
+                </div>
+
+                <div class="row" style="margin-bottom: 30px">
+                    <div class="col-xs-3 centered">
+                        <h3>Structurizr</h3>
+                        <p class="small">
+                            <a href="https://structurizr.com" target="_blank">Structurizr</a> به طور خاص برای پشتیبانی از مدل C4 طراحی شده است و به شما امکان می دهد
+                            <a href="https://structurizr.com/help/code" target="_blank">نمودارهایی به صورت کد</a> (Java, .NET, TypeScript, PHP, Python, Go),
+                            <a href="https://structurizr.com/help/text" target="_blank">نمودارها را به صورت متن</a> (text-based DSL, YAML),
+                            یا با استفاده از <a href="https://structurizr.com/help/workspace-editor" target="_blank">web-based UI</a>ایجاد کنید.
+                            The open source <a href="https://github.com/structurizr/cli" target="_blank">Structurizr CLI</a>می تواند نمودارهایی را در قالب PlantUML ، Mermaid و WebSequenceDiagrams تولید کند. برخی از پسوندهای VS Code در دسترس هستند که از Structurizr DSL پشتیبانی می کنند:
+                        </p>
+
+                        <ul style="list-style: none" class="small">
+                            <li><a href="https://marketplace.visualstudio.com/items?itemName=ciarant.vscode-structurizr" target="_blank">Structurizr DSL syntax highlighting</a> توسط Ciaran Treanor</li>
+                            <li><a href="https://marketplace.visualstudio.com/items?itemName=systemticks.c4-dsl-extension" target="_blank">C4 DSL Extension</a> توسط systemticks</li>
+                        </ul>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-console" aria-hidden="true"></span> Text-based</span>
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Cloud</span>
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Freemium</span>
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <h3>Archi</h3>
+                        <p class="small">
+                            <a href="https://www.archimatetool.com" target="_blank">Archi</a>راهی برای ایجاد نمودارهای مدل C4 با ArchiMate فراهم می کند.
+                            برای جزئیات بیشتر به <a href="https://www.archimatetool.com/blog/2020/04/18/c4-model-architecture-viewpoint-and-archi-4-7/" target="_blank">مدل C4 ، نمای معماری و Archi 4.7</a> مراجعه کنید ..
+                        </p>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Free</span>
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <h3>Sparx Enterprise Architect</h3>
+                        <p class="small">
+                            LieberLieber نرم افزاری است که برای <a href="http://www.sparxsystems.eu/c4/" target="_blank">مدل C4 ساخته شده است</a> و بر اساس فن آوری MDG ساخته شده در <a href="https://sparxsystems.com/products/ea/index.html" target="_blank">Sparx Enterprise Architect</a> می باشد.
+                        </p>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Paid</span>
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <h3>MooD</h3>
+                        <p class="small">
+                            <a href="https://www.moodsoftware.co.uk" target="_blank">MooD</a> از طریق مجموعه ای از طرح های اولیه از مدل C4 <a href="https://supportportal.moodinternational.com/hc/en-us/articles/360015465100-MooD-and-the-C4-model" target="_blank">پشتیبانی می کند</a>.
+                        </p>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Cloud</span>
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Paid</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="centered">
+                    ابزارهای نمودارسازی
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-3 centered">
+                        <h3>PlantUML</h3>
+                        <p class="small">
+                            تعدادی افزونه برای  <a href="https://plantuml.com" target="_blank">PlantUML</a> وجود دارد که به ایجاد نمودارهای مدل C4 کمک می کند:
+                        </p>
+                        <ul style="list-style: none" class="small">
+                            <li><a href="https://github.com/RicardoNiepel/C4-PlantUML" target="_blank">C4-PlantUML</a> توسط Ricardo Niepel</li>
+                            <li><a href="https://github.com/skleanthous/C4-PlantumlSkin" target="_blank">C4-PlantumlSkin</a> توسط Savvas Kleanthous</li>
+                            <li><a href="https://adrianvlupu.github.io/C4-Builder" target="_blank">c4builder</a> توسط Victor Lupu</li>
+                            <li><a href="https://github.com/tmorin/plantuml-libs" target="_blank">plantuml-libs</a> توسط Thibault Morin</li>
+                        </ul>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-console" aria-hidden="true"></span> Text-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Cloud</span>
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Free</span>
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <h3>diagrams.net</h3>
+                        <p class="small">
+                            <a href="https://www.diagrams.net" target="_blank">diagrams.net</a> شامل <a href="https://app.diagrams.net/?libs=c4" target="_blank">پشتیبانی از مدل C4 است</a>, و همچنین تعدادی پلاگین وجود دارد که به شما این امکان را می دهد نمودارها را با استفاده از اشکال از پیش تولید شده ایجاد کنید:
+                        </p>
+
+                        <ul style="list-style: none" class="small">
+                            <li><a href="https://github.com/kaminzo/c4-draw.io" target="_blank">c4-draw.io</a> توسط Chris Kaminski</li>
+                            <li><a href="https://github.com/tobiashochguertel/c4-draw.io" target="_blank">c4-draw.io</a> توسط Tobias Hochgürtel</li>
+                            <li><a href="https://github.com/maciek365/c4-diagrams.net" target="_blank">EasyC4</a> توسط Maciek Sliwinski</li>
+                        </ul>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Cloud</span>
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Free</span>
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <h3>OmniGraffle</h3>
+                        <p class="small">
+                            دنیس لاومن یک  <a href="https://stenciltown.omnigroup.com/stencils/c4/" target="_blank">استنسیل مدل C4 </a> برای <a href="https://www.omnigroup.com/omnigraffle/" target="_blank">OmniGraffle</a>, ایجاد کرده است که به شما امکان می دهد نمودارها را با استفاده از اشکال از پیش تولید شده ایجاد کنید.
+                        </p>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Paid</span>
+                        </p>
+                    </div>
+                    <div class="col-xs-3 centered">
+                        <h3>Microsoft Visio</h3>
+                        <p class="small">
+                            "pihalve" <a href="https://github.com/pihalve/c4model-visio-stencil" target="_blank">الگوی مدل C4 </a> را برای  <a href="https://www.microsoft.com/en-ww/microsoft-365/visio/flowchart-software" target="_blank">Microsoft Visio</a>ایجاد کرده است که به شما امکان می دهد نمودارها را با استفاده از اشکال از پیش تولید شده ایجاد کنید.
+                        </p>
+
+                        <p class="centered">
+                            <span class="label structurizrBackgroundBase smaller"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> GUI-based</span>
+                            <br />
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Cloud</span>
+                            <span class="label structurizrBackgroundLight smaller"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> On-premises</span>
+                            <br />
+                            <span class="label structurizrBackgroundLighter smaller"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Paid</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <a name="References"></a>
+                <h2>منابع</h2>
+                <p>
+                    در منابع زیر به مدل C4 اشاره شده است.
+                </p>
+
+                <ul style="direction: ltr">
+                    <li><a href="https://publications.opengroup.org/c208" target="_blank" >Open Agile Architecture™, a Standard of The Open Group</a></li>
+                    <li><a href="https://publications.opengroup.org/g20e" target="_blank">Agile Architecture Modeling using the ArchiMate® Language</a></li>
+                    <li><a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/" target="_blank">Fundamentals of Software Architecture</a> <span class="small">(Mark Richards and Neal Ford)</span></li>
+                    <li><a href="https://pragprog.com/titles/mkdsa/design-it/" target="_blank">Design It!</a> <span class="small">(Michael Keeling)</span></li>
+                    <li><a href="https://en.wikipedia.org/wiki/C4_model" target="_blank">Wikipedia</a></li>
+                </ul>
+
+                <p>
+                    Structurizr DSL (طراحی شده برای پشتیبانی از مدل C4) همچنین در  <a href="https://www.thoughtworks.com/radar/techniques?blipid=202010027" target="_blank">ThoughtWorks Tech Radar - Techniques - Diagrams as code</a> پدیدار شده است.
+                </p>
+            </div>
+        </div>
+
+        <div id="footer">
+            <div class="container">
+                <p>
+                    <a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0; margin-right: 5px;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+                    این وب سایت ، نمودارهای نمونه ، متون توضیحی و اسلایدها تحت مجوز بین المللی <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 مجوز دارند.</a>.
+                </p>
+
+                <p>
+                    <img src="./img/simonbrown.jpg" width="40px" alt="Simon Brown" class="img-circle" style="margin-right: 5px;" />
+                    مدل C4 توسط سایمون براون ایجاد شده است
+                    -
+                    <a href="https://twitter.com/simonbrown">simonbrown</a>
+                    |
+                    <a href="http://simonbrown.je"> simonbrown.je</a>
+                    |
+                    <a href="mailto:simon@architectis.je" target="_blank">simon@architectis.je</a>
+                </p>
+                <p>
+                    <img src="./img/mehdihasanpour.jpeg" width="40px" alt="Simon Brown" class="img-circle" style="margin-right: 5px;" />
+                    این وب سایت توسط مهدی حسن پور بر اساس  <a rel="license" href="https://c4model.com/" target="_blank">الگوی سایت اصلی </a>ایجاد شده است و حق و کپی رایت آن محفوظ میباشد 
+                    -
+                    <a href="https://twitter.com/mehdihp55870103">mehdihp55870103</a>
+                    |
+                    <a href="mailto:mhp1361@gmail.com" target="_blank">mhp1361@gmail.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="systemContextDiagramModal" tabindex="-1" role="dialog" aria-labelledby="systemContextDiagramModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header" style="direction: rtl">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="systemContextDiagramModalLabel">سطح 1: System Context diagram</h4>
+            </div>
+            <div class="modal-body" style="direction: rtl">
+                <p>
+                    این یک نمونه نمودار زمینه سیستم برای یک سیستم بانکی اینترنتی غیر واقعی است. افرادی که از آن استفاده می کنند و سایر سیستم های نرم افزاری که سیستم بانکداری اینترنتی با آنها ارتباط دارد را نشان می دهد. مشتریان شخصی بانک برای مشاهده اطلاعات حساب های بانکی خود و پرداخت ، از سیستم بانکی اینترنتی استفاده می کنند. سیستم بانکداری اینترنتی خود برای این کار از سیستم بانکی Mainframe Banking موجود بانک استفاده می کند و از سیستم پست الکترونیکی موجود بانک برای ارسال ایمیل به مشتریان استفاده می کند.
+                </p>       
+                <p>
+                    <img src="./img/bigbankplc-SystemContext.png" alt="A System Context diagram" class="img-thumbnail" />
+                </p>
+                <p>
+                    از کدگذاری رنگی برای نشان دادن سیستم های نرم افزاری موجود (جعبه های خاکستری) استفاده شده است.
+                </p>     
+                <p class="centered">
+                    <img src="./img/bigbankplc-SystemContext-key.png" alt="A diagram key" class="img-thumbnail" style="width: 80%" />
+                </p>
+                <br /><br />
+                <h4>نشان دادن مرز شرکت</h4>
+                <p>
+                    در این مثال کمی اصلاح شده ، خط چین نشان دهنده مرز بانک است و برای نشان دادن آنچه در داخل و خارج از بانک است استفاده می شود.
+                </p>     
+                <p>
+                    <img src="./img/bigbankplc-SystemContext-with-enterprise-boundary.png" alt="A System Context diagram, with an explicit enterprise boundary" class="img-thumbnail" />
+                </p>
+                <p class="centered">
+                    <img src="./img/bigbankplc-SystemContext-with-enterprise-boundary-key.png" alt="A diagram key" class="img-thumbnail" style="width: 80%" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="containerDiagramModal" tabindex="-1" role="dialog" aria-labelledby="containerDiagramModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header"style="direction: rtl">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="containerDiagramModalLabel">سطح 2: Container diagram</h4>
+            </div>
+            <div class="modal-body" style="direction: rtl">
+                <p>
+                    این یک نمونه نمودار کانتینر برای یک سیستم فرضی بانکداری اینترنتی است. این نشان می دهد که سیستم بانکداری اینترنتی (جعبه نقطه چینی) از پنج محفظه تشکیل شده است: یک برنامه وب سمت سرور ، یک برنامه تک صفحه ای ، یک برنامه تلفن همراه ، یک برنامه API سمت سرور و یک پایگاه داده. Web Application یک برنامه وب Java / Spring MVC است که به سادگی محتوای ساکن (HTML ، CSS و JavaScript) ، از جمله محتوای برنامه Single-Page را ارائه می دهد. برنامه Single-Page یک برنامه Angular است که در مرورگر وب مشتری اجرا می شود و تمام ویژگی های بانکداری اینترنتی را فراهم می کند. در روش دیگر ، مشتریان می توانند با استفاده از برنامه Xamarin Mobile cross paltform ، به زیر مجموعه ای از قابلیت های بانکداری اینترنتی دسترسی پیدا کنند.
+                </p>
+                <p>
+                    هر دو برنامه Single-Page و Mobile App از یک API JSON / HTTPS استفاده می کنند که توسط برنامه Java / Spring MVC دیگری که در سرور اجرا می شود ارائه می شوند. برنامه API اطلاعات کاربر را از بانک اطلاعاتی (یک طرح پایگاه داده رابطه ای) دریافت می کند. برنامه API همچنین با استفاده از یک رابط اختصاصی XML / HTTPS ، با سیستم بانکی Mainframe بانکی موجود ارتباط برقرار می کند تا اطلاعات مربوط به حساب های بانکی را بدست آورد یا تراکنش ها را انجام دهد. در صورت نیاز به ارسال نامه الکترونیکی به مشتریان ، برنامه API همچنین از سیستم نامه الکترونیکی موجود استفاده می کند.
+                </p>       
+                <p>
+                    <img src="./img/bigbankplc-Containers.png" alt="A Container diagram" class="img-thumbnail" />
+                </p>
+                <p>
+                    خط چین نشان دهنده مرز سیستم بانکی اینترنتی است که کانتینرهای (آبی روشن) درون آن را نشان می دهد. علاوه بر این ، از یک شکل استوانه برای نشان دادن پایگاه داده استفاده شده است.
+                </p>     
+                <p class="centered">
+                    <img src="./img/bigbankplc-Containers-key.png" alt="A diagram key" class="img-thumbnail" style="width: 80%" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="modal fade" id="componentDiagramModal" tabindex="-1" role="dialog" aria-labelledby="componentDiagramModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header" style="direction: rtl">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="componentDiagramModalLabel">سطح 3: Component diagram</h4>
+            </div>
+            <div class="modal-body" style="direction: rtl">
+                <p>
+                    این یک مثال نمودار اجزای یک سیستم بانکداری اینترنتی فرضی است که برخی (و نه همه) اجزای موجود در برنامه API را نشان می دهد. در اینجا ، سه Spring MVC Rest Controller وجود دارد که نقاط دستیابی API JSON / HTTPS را فراهم می کند ، و هر کنترل کننده متعاقباً از سایر اجزا برای دسترسی به داده های پایگاه داده و سیستم بانکی Mainframe یا ارسال نامه های الکترونیکی استفاده می کند.
+                </p>       
+                <p>
+                    <img src="./img/bigbankplc-Components.png" alt="A Component diagram" class="img-thumbnail" />
+                </p>
+                <p>
+                    خط چین مرز برنامه API را نشان می دهد و اجزای سازنده (آبی روشن) را در داخل آن نشان می دهد.
+                </p>     
+                <p class="centered">
+                    <img src="./img/bigbankplc-Components-key.png" alt="A diagram key" class="img-thumbnail" style="width: 80%" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="classDiagramModal" tabindex="-1" role="dialog" aria-labelledby="classDiagramModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header" style="direction: rtl">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="classDiagramModalLabel">سطح 4: Code</h4>
+            </div>
+            <div class="modal-body" style="direction: rtl">
+                <p>
+                    این یک نمودار کلاس UML نمونه (و جزئی) برای یک سیستم فرضی بانکداری اینترنتی است که عناصر کد (رابط ها و کلاس ها) را نشان می دهد که اجزاء MainframeBankingSystemFacade را تشکیل می دهند. این نشان می دهد که این اجزاء از تعدادی کلاس تشکیل شده است که جزئیات مربوط به اجرای آن منعکس کننده مستقیم کد است.
+                </p>       
+                <p>
+                    <img src="./img/bigbankplc-Classes.png" alt="A UML class diagram" class="img-thumbnail" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
